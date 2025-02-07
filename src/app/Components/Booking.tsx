@@ -1,5 +1,5 @@
-import Image from "next/image";
-import swi from "@/app/components/public/swi.png";
+import { TbSwitch3 } from "react-icons/tb";
+
 
 
 function BookingSection() {
@@ -44,7 +44,8 @@ function BookingSection() {
             {/* Refresh Icon */}
             <div className="flex justify-center items-center mb-6 md:mb-0">
                 <div>
-                    <Image src={swi} width={120} height={120} alt="switch"/>
+                <TbSwitch3 className=" bg-blue-600 w-[120px] h-[120px]" />
+
                 </div>
             </div>
 
