@@ -3,11 +3,11 @@
 import { client } from "@/sanity/lib/client";
 import { allCarsQuery } from "@/sanity/lib/qureries";
 import type { Car } from "@/types/Car";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "../Product/ProductCard";
 
-const CategoryPage = () => {
+function CategoryContent() {
   const searchParams = useSearchParams();
   const categoryTag = searchParams.get("tag") || "all";
   const [cars, setCars] = useState<Car[]>([]);
@@ -122,6 +122,12 @@ const CategoryPage = () => {
       </div>
     </div>
   );
-};
+}
 
-export default CategoryPage;
+export default function CategoryPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CategoryContent />
+    </Suspense>
+  );
+}
