@@ -44,7 +44,7 @@ function BookingSection() {
             {/* Refresh Icon */}
             <div className="flex justify-center items-center mb-6 md:mb-0">
                 <div>
-                <TbSwitch3 className=" bg-blue-600 w-[120px] h-[120px]" />
+                <TbSwitch3 className=" rounded-full bg-blue-600 w-[100px] h-[100px]" />
 
                 </div>
             </div>
