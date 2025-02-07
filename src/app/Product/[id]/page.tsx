@@ -62,7 +62,10 @@ const CarDetail = () => {
 
   const handleRentNow = () => {
     // Directly redirect to payment page
-    router.push("/payment");
+    if (car) {
+      router.push(`/payment?id=${car._id}`);
+    }
+
   };
 
   return (

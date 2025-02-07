@@ -1,21 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
-import Logo from "./app/Components/public/Logo.png";
-import Search from "./app/components/public/search.png";
-import Filter from "./app/components/public/filter.png";
-import Like from "./app/components/public/Like.png";
-import Notification from "./app/components/public/Notification.png";
-import Settings from "./app/components/public/Settings.png";
-import Profile from "./app/components/public/profile.png";
-import { client } from "@/sanity/lib/client"; // Sanity client import karein
-import { searchCarsQuery } from "@/sanity/lib/qureries"; // Groq query import karein
+import Link from "next/link";
+import { CiSearch } from "react-icons/ci";
+import { LuSettings2 } from "react-icons/lu";
+import { FaHeart } from "react-icons/fa6";
+import { IoNotificationsCircleOutline } from "react-icons/io5";
+import { IoMdSettings } from "react-icons/io";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+
+import { client } from "@/sanity/lib/client";
+import { searchCarsQuery } from "@/sanity/lib/qureries";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [carType, setCarType] = useState("");
   const [seating, setSeating] = useState("");
   const [price, setPrice] = useState("");
+
   interface Car {
     name: string;
     pricePerDay: number;
@@ -31,7 +32,7 @@ export default function Header() {
       const query = searchCarsQuery(searchQuery, carType, seating, price);
       const results = await client.fetch(query, { searchQuery, carType, seating, price });
       setSearchResults(results);
-      console.log("Search Results:", results); // Debugging ke liye
+      console.log("Search Results:", results);
     } catch (error) {
       console.error("Search Error:", error);
     }
@@ -40,24 +41,13 @@ export default function Header() {
   return (
     <div className="h-auto w-full flex flex-wrap items-center justify-between px-4 py-4 bg-white">
       {/* Logo */}
-      <div className="w-[120px] h-[40px] flex-shrink-0">
-        <Image
-          src={Logo}
-          alt="Logo"
-          width={120}
-          height={40}
-          className="w-full h-full object-contain ml-4"
-        />
-      </div>
+      <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-colors duration-300">
+        MORENT
+      </Link>
 
       {/* Search Bar */}
       <div className="flex items-center gap-2 w-full max-w-[492px] h-[44px] border rounded-full px-3 mt-4 ml-1 md:mt-0 md:flex-1 md:mr-8">
-        <Image
-          src={Search}
-          alt="Search"
-          width={20}
-          height={20}
-        />
+        <CiSearch className="h-[20px] w-[20px]" />
         <input
           type="text"
           placeholder="Search something here"
@@ -66,50 +56,37 @@ export default function Header() {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button onClick={handleSearch}>
-          <Image
-            src={Filter}
-            alt="Filter"
-            width={20}
-            height={20}
-          />
+          <LuSettings2 className="h-[20px] w-[20px]" />
         </button>
       </div>
 
-      {/* Profile Icons */}
+      {/* Profile & Authentication */}
       <div className="flex items-center space-x-4 mt-4 md:mt-0">
         <a href="#">
-          <Image
-            src={Like}
-            alt="Like"
-            width={36}
-            height={36}
-          />
+          <FaHeart className="w-7 h-7" />
         </a>
         <a href="#">
-          <Image
-            src={Notification}
-            alt="Notification"
-            width={36}
-            height={36}
-          />
+          <IoNotificationsCircleOutline className="h-9 w-9" />
         </a>
         <a href="#">
-          <Image
-            src={Settings}
-            alt="Settings"
-            width={36}
-            height={36}
-          />
+          <IoMdSettings className="h-9 w-9" />
         </a>
-        <a href="#">
-          <Image
-            src={Profile}
-            alt="Profile"
-            width={44}
-            height={44}
-            className="rounded-full"
-          />
-        </a>
+
+        {/* Authentication */}
+        <div className="flex items-center space-x-4">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition">
+                Sign In
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" appearance={{
+              elements: { avatarBox: "w-10 h-10 border-2 border-gray-300 shadow-md" }
+            }} />
+          </SignedIn>
+        </div>
       </div>
 
       {/* Display Search Results */}
