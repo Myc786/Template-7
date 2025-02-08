@@ -58,67 +58,68 @@ function CategoryContent() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 flex">
-      {/* Sidebar Filter */}
-      <aside className="w-1/4  border-r bg-white rounded max-h-auto p-7">
-        <h2 className="text-xl font-semibold mb-4">Filters</h2>
-        {/* Brand Filter */}
-        <div className="mb-4">
-          <h3 className="font-medium">Brand</h3>
-          {["Toyota", "Honda", "Ford", "BMW"].map((brand) => (
-            <div key={brand} className="flex items-center mt-2">
-              <input type="checkbox" id={brand} checked={selectedBrands.includes(brand)} onChange={() => handleBrandChange(brand)} className="mr-2" />
-              <label htmlFor={brand}>{brand}</label>
+    <div className="max-w-7xl mx-auto p-6">
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Filters Section */}
+        <div className="w-full md:w-1/4 bg-gray-50 p-4 rounded-lg">
+          <h2 className="text-xl font-bold mb-4">Filters</h2>
+          <div className="space-y-4">
+            {/* Brand Filter */}
+            <div>
+              <h3 className="font-semibold mb-2">Brands</h3>
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
+                {["Toyota", "Honda", "Ford", "BMW"].map((brand) => (
+                  <div key={brand} className="flex items-center">
+                    <input type="checkbox" id={brand} checked={selectedBrands.includes(brand)} onChange={() => handleBrandChange(brand)} className="mr-2" />
+                    <label htmlFor={brand}>{brand}</label>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-        {/* Car Type Filter */}
-        <div className="mb-4">
-          <h3 className="font-medium">Car Type</h3>
-          {["Sport", "SUV", "Sedan", "Hatchback", "Coupe"].map((type) => (
-            <div key={type} className="flex items-center mt-2">
-              <input type="checkbox" id={type} checked={carTypes.includes(type)} onChange={() => handleCarTypeChange(type)} className="mr-2" />
-              <label htmlFor={type}>{type}</label>
+            
+            {/* Car Type Filter */}
+            <div>
+              <h3 className="font-semibold mb-2">Car Types</h3>
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
+                {["Sport", "SUV", "Sedan", "Hatchback", "Coupe"].map((type) => (
+                  <div key={type} className="flex items-center">
+                    <input type="checkbox" id={type} checked={carTypes.includes(type)} onChange={() => handleCarTypeChange(type)} className="mr-2" />
+                    <label htmlFor={type}>{type}</label>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-        {/* Seating Capacity Filter */}
-        <div className="mb-4">
-          <h3 className="font-medium">Seating Capacity</h3>
-          {[2, 4, 5, 7].map((seats) => (
-            <div key={seats} className="flex items-center mt-2">
-              <input type="checkbox" id={`${seats}seats`} checked={seatingCapacities.includes(seats)} onChange={() => handleSeatingChange(seats)} className="mr-2" />
-              <label htmlFor={`${seats}seats`}>{seats} Seats</label>
+            
+            {/* Price Range Filter */}
+            <div>
+              <h3 className="font-semibold mb-2">Price Range</h3>
+              <input type="range" min="0" max="1000" value={priceRange[1]} onChange={handlePriceChange} className="w-full" />
+              <p>Max Price: ${priceRange[1]}</p>
             </div>
-          ))}
+          </div>
+          {/* Apply Filters Button */}
+          <button 
+            onClick={() => setApplyFilters(true)}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-300 w-full"
+          >
+            Apply Filters
+          </button>
         </div>
-        {/* Price Range Filter */}
-        <div>
-          <h3 className="font-medium">Price Range</h3>
-          <input type="range" min="0" max="1000" value={priceRange[1]} onChange={handlePriceChange} className="w-full" />
-          <p>Max Price: ${priceRange[1]}</p>
-        </div>
-        {/* Apply Filters Button */}
-        <button 
-          onClick={() => setApplyFilters(true)}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-300 w-full"
-        >
-          Apply Filters
-        </button>
-      </aside>
-      
-      {/* Cars List */}
-      <div className="w-3/4 pl-5">
-        <h1 className="text-3xl font-bold mb-6 capitalize">{categoryTag} Cars</h1>
-        {filteredCars.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+
+        {/* Cars Grid Section */}
+        <div className="w-full md:w-3/4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredCars.map((car) => (
               <ProductCard key={car._id} car={car} />
             ))}
           </div>
-        ) : (
-          <p className="text-center text-gray-500">No cars found in this category.</p>
-        )}
+          
+          {filteredCars.length === 0 && (
+            <div className="text-center text-gray-500 mt-10">
+              No cars found matching your filters.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
